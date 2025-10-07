@@ -1,0 +1,38 @@
+{
+  "bin": {
+      "walker-sessions": "jdeploy-bundle/jdeploy.js"
+  },
+  "author": "Objektwerks",
+  "description": "Walker sessions app.",
+  "main": "index.js",
+  "preferGlobal": true,
+  "repository": {
+      "type": "git",
+      "url": "git+https://github.com/objektwerks/walker.p.git"
+  },
+  "version": "1.0.0",
+  "jdeploy": {
+      "jdk": false,
+      "javaVersion": "25",
+      "jar": ".assembly/walker-1.1.0.jar",
+      "javafx": true,
+      "javafxVersion": "25",
+      "title": "Walker"
+  },
+  "dependencies": {
+      "command-exists-promise": "^2.0.2",
+      "node-fetch": "3.3.2",
+      "tar": "7.4.3",
+      "yauzl": "^2.10.0",
+      "shelljs": "^0.8.5"
+  },
+  "license": "Apache 2.0",
+  "name": "walker-sessions",
+  "files": [
+      "jdeploy-bundle"
+  ],
+  "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "homepage": "https://github.com/objektwerks/walker.p"
+}
