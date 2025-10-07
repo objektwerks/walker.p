@@ -1,12 +1,5 @@
 package walker
 
-import com.typesafe.config.Config
-import com.zaxxer.hikari.HikariDataSource
-
-import java.time.LocalDate
-import java.util.concurrent.TimeUnit
-import javax.sql.DataSource
-
 import com.zaxxer.hikari.HikariDataSource
 
 import javax.sql.DataSource
@@ -94,25 +87,4 @@ final class Store(context: Context):
         """
         .update()
       sess.id
-    }
-
-  def listFaults(): List[Fault] =
-    DB readOnly { implicit session =>
-      sql"select * from fault order by occurred desc"
-        .map(rs =>
-          Fault(
-            rs.string("cause"),
-            rs.string("occurred")
-          )
-        )
-        .list()
-    }
-
-  def addFault(fault: Fault): Fault =
-    DB localTx { implicit session =>
-      sql"""
-        insert into fault(cause, occurred) values(${fault.cause}, ${fault.occurred})
-        """
-        .update()
-        fault
     }
