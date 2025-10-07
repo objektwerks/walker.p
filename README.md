@@ -32,13 +32,13 @@ Run
 ---
 1. sbt run
 
-Client Assembly
----------------
-1. sbt clean test assembly copyAssemblyJar
+Assembly
+--------
+1. ```sbt clean test assembly copyAssemblyJar```
 
-Execute Client
---------------
-1. java -jar .assembly/walker-$version.jar ( or double-click executable jar )
+Execute
+-------
+1. ```java -jar .assembly/swimmer-$version.jar```
 
 Resources
 ---------
