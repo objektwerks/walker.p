@@ -14,7 +14,7 @@
   "jdeploy": {
       "jdk": false,
       "javaVersion": "25",
-      "jar": ".assembly/walker-1.1.0.jar",
+      "jar": ".assembly/walker-1.0.0.jar",
       "javafx": true,
       "javafxVersion": "25",
       "title": "Walker"
