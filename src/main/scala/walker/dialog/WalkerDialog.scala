@@ -5,10 +5,10 @@ import scalafx.scene.layout.Region
 import scalafx.scene.control.{ButtonType, Dialog, TextField}
 import scalafx.scene.control.ButtonBar.ButtonData
 
-import walker.{Client, Context, Walker}
+import walker.{App, Context, Walker}
 
 final class WalkerDialog(context: Context, walker: Walker) extends Dialog[Walker]:
-  initOwner(Client.stage)
+  initOwner(App.stage)
   title = context.windowTitle
   headerText = context.dialogWalker
 
