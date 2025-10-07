@@ -8,9 +8,7 @@ import scalafx.application.Platform
 import scalafx.collections.ObservableBuffer
 import scalafx.beans.property.ObjectProperty
 
-import Fault.given
-
-final class Model(fetcher: Fetcher) extends LazyLogging:
+final class Model(store: Store) extends LazyLogging:
   def assertInFxThread(message: String, suffix: String = " should be in fx thread!"): Unit =
     require(Platform.isFxApplicationThread, message + suffix)
   def assertNotInFxThread(message: String, suffix: String = " should not be in fx thread!"): Unit =
@@ -26,91 +24,14 @@ final class Model(fetcher: Fetcher) extends LazyLogging:
     sessions(newWalkerId)
   }
 
-  val objectAccount = ObjectProperty[Account](Account.empty)
   val observableWalkers = ObservableBuffer[Walker]()
   val observableSessions = ObservableBuffer[Session]()
-  val observableFaults = ObservableBuffer[Fault]()
-
-  def onFetchFault(source: String, fault: Fault): Unit =
-    val cause = s"$source - $fault"
-    logger.error("*** cause: {}", cause)
-    observableFaults += fault.copy(cause = cause)
-
-  def onFetchFault(source: String, entity: Entity, fault: Fault): Unit =
-    val cause = s"$source - $entity - $fault"
-    logger.error("*** cause: {}", cause)
-    observableFaults += fault.copy(cause = cause)
-
-  def add(fault: Fault): Unit =
-    supervised:
-      assertNotInFxThread(s"add fault: $fault")
-      fetcher.fetch(
-        AddFault(objectAccount.get.license, fault),
-        (event: Event) => event match
-          case fault @ Fault(cause, _) => onFetchFault("add fault", fault)
-          case FaultAdded() =>
-            observableFaults += fault
-            observableFaults.sort()
-          case _ => ()
-      )
-
-  def register(register: Register): Unit =
-    supervised:
-      assertNotInFxThread(s"register: $register")
-      fetcher.fetch(
-        register,
-        (event: Event) => event match
-          case _ @ Fault(_, _) => registered.set(false)
-          case Registered(account) => objectAccount.set(account)
-          case _ => ()
-      )
-
-  def login(login: Login): Unit =
-    supervised:
-      assertNotInFxThread(s"login: $login")
-      fetcher.fetch(
-        login,
-        (event: Event) => event match
-          case _ @ Fault(_, _) => loggedin.set(false)
-          case LoggedIn(account) =>
-            objectAccount.set(account)
-            walkers()
-          case _ => ()
-      )
-
-  def deactivate(deactivate: Deactivate): Unit =
-    supervised:
-      assertNotInFxThread(s"deactivate: $deactivate")
-      fetcher.fetch(
-        deactivate,
-        (event: Event) => event match
-          case fault @ Fault(_, _) => onFetchFault("deactivate", fault)
-          case Deactivated(account) => objectAccount.set(account)
-          case _ => ()
-      )
-
-  def reactivate(reactivate: Reactivate): Unit =
-    supervised:
-      assertNotInFxThread(s"reactivate: $reactivate")
-      fetcher.fetch(
-        reactivate,
-        (event: Event) => event match
-          case fault @ Fault(_, _) => onFetchFault("reactivate", fault)
-          case Reactivated(account) => objectAccount.set(account)
-          case _ => ()
-      )
 
   def walkers(): Unit =
     supervised:
       assertNotInFxThread("list walkers")
-      fetcher.fetch(
-        ListWalkers(objectAccount.get.license, objectAccount.get.id),
-        (event: Event) => event match
-          case fault @ Fault(_, _) => onFetchFault("walkers", fault)
-          case WalkersListed(walkers) =>
-            observableWalkers.clear()
-            observableWalkers ++= walkers
-          case _ => ()
+      observableWalkers.clear
+      observableWalkers ++= store.listWalkers()
       )
 
   def add(walker: Walker)(runLast: => Unit): Unit =

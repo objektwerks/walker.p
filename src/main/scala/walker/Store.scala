@@ -18,9 +18,9 @@ final class Store(context: Context):
 
   ConnectionPool.singleton(DataSourceConnectionPool(dataSource))
 
-  def listWalkers(accountId: Long): List[Walker] =
+  def listWalkers(): List[Walker] =
     DB readOnly { implicit session =>
-      sql"select * from walker where account_id = $accountId order by name"
+      sql"select * from walker order by name"
         .map(rs =>
           Walker(
             rs.long("id"),
