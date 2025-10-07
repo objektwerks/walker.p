@@ -6,7 +6,7 @@ import scalafx.scene.control.{Button, SelectionMode, Tab, TabPane, TableColumn, 
 import scalafx.scene.layout.{HBox, Priority, VBox}
 
 import walker.{Context, Model, Walker}
-import walker.dialog.{AccountDialog, FaultsDialog, WalkerDialog, DeactivateReactivate}
+import walker.dialog.WalkerDialog
 
 final class WalkersPane(context: Context, model: Model) extends VBox:
   spacing = 6
@@ -33,21 +33,9 @@ final class WalkersPane(context: Context, model: Model) extends VBox:
     disable = true
     onAction = { _ => update() }
 
-  val accountButton = new Button:
-    graphic = context.accountImage
-    text = context.buttonAccount
-    disable = false
-    onAction = { _ => account() }
-
-  val faultsButton = new Button:
-    graphic = context.faultsImage
-    text = context.buttonFaults
-    disable = true
-    onAction = { _ => faults() }
-
   val buttonBar = new HBox:
     spacing = 6
-    children = List(addButton, editButton, accountButton, faultsButton)
+    children = List(addButton, editButton)
   
   val tab = new Tab:
   	text = context.tabWalkers
@@ -65,10 +53,6 @@ final class WalkersPane(context: Context, model: Model) extends VBox:
   VBox.setVgrow(tableView, Priority.Always)
   VBox.setVgrow(tabPane, Priority.Always)
 
-  model.observableFaults.onChange { (_, _) =>
-    faultsButton.disable = false
-  }
-
   tableView.onMouseClicked = { event =>
     if (event.getClickCount == 2 && tableView.selectionModel().getSelectedItem != null) update()
   }
@@ -84,10 +68,10 @@ final class WalkersPane(context: Context, model: Model) extends VBox:
   }
 
   def add(): Unit =
-    WalkerDialog(context, Walker(accountId = model.objectAccount.get.id, name = "")).showAndWait() match
-      case Some(walker: Walker) => model.add(walker) {
-        tableView.selectionModel().select(walker.copy(id = model.selectedWalkerId.value))
-      }
+    WalkerDialog(context, Walker(name = "")).showAndWait() match
+      case Some(walker: Walker) =>
+        model.add(walker)
+        tableView.selectionModel().select(0)
       case _ =>
 
   def update(): Unit =
@@ -95,15 +79,7 @@ final class WalkersPane(context: Context, model: Model) extends VBox:
       val selectedIndex = tableView.selectionModel().getSelectedIndex
       val walker = tableView.selectionModel().getSelectedItem.walker
       WalkerDialog(context, walker).showAndWait() match
-        case Some(walker: Walker) => model.update(selectedIndex, walker) {
+        case Some(updatedWalker: Walker) =>
+          model.update(walker, updatedWalker)
           tableView.selectionModel().select(selectedIndex)
-        }
         case _ =>
-
-  def account(): Unit = AccountDialog(context, model.objectAccount.get).showAndWait() match
-      case Some( DeactivateReactivate( Some(deactivate), None) ) => model.deactivate(deactivate)
-      case Some( DeactivateReactivate( None, Some(reactivate) ) ) => model.reactivate(reactivate)
-      case _ =>
-
-  def faults(): Unit = FaultsDialog(context, model).showAndWait() match
-    case _ => faultsButton.disable = model.observableFaults.isEmpty
