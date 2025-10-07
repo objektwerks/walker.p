@@ -73,7 +73,7 @@ final class SessionsPane(context: Context, model: Model) extends VBox:
     children = List(addButton, editButton, chartButton)
 
   val tab = new Tab:
-  	text = context.tabWalkers
+  	text = context.tabSessions
   	closable = false
   	content = new VBox {
       spacing = 6
