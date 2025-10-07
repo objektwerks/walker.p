@@ -1,25 +1,27 @@
-val helidonVersion = "4.3.0"
-val scalafxVersion = "24.0.2-R36"
-val logbackVersion = "1.5.19"
-val scalatestVersion = "3.2.19"
-val oxVersion = "1.0.1"
-
-lazy val common = Defaults.coreDefaultSettings ++ Seq(
-  organization := "objektwerks",
-  version := "4.0.0",
-  scalaVersion := "3.7.4-RC1",
-  scalacOptions ++= Seq(
-    "-Wunused:all"
+name := "walker.p"
+organization := "objektwerks"
+version := "1.0.0"
+scalaVersion := "3.7.4-RC1"
+mainClass := Some("walker.App")
+libraryDependencies ++= {
+  Seq(
+    "org.scalafx" %% "scalafx" % "24.0.2-R36",
+    "com.softwaremill.ox" %% "core" % "1.0.1",
+    "org.scalikejdbc" %% "scalikejdbc" % "4.3.2",
+    "com.zaxxer" % "HikariCP" % "7.0.2" exclude("org.slf4j", "slf4j-api"),
+    "com.h2database" % "h2" % "2.4.240",
+    "com.typesafe" % "config" % "1.4.3",
+    "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
+    "ch.qos.logback" % "logback-classic" % "1.5.19",
+    "org.scalatest" %% "scalatest" % "3.2.19" % Test
   )
+}
+scalacOptions ++= Seq(
+  "-Wunused:all"
 )
-
-lazy val walker = (project in file("."))
-  .aggregate(client, shared, server)
-  .settings(common)
-  .settings(
-    publish := {},
-    publishLocal := {},
-  )
+outputStrategy := Some(StdoutOutput)
+parallelExecution := false
+fork := true
 
 // Begin: Assembly Tasks
 lazy val createAssemblyDir = taskKey[File]("Create assembly dir.")
@@ -54,6 +56,8 @@ copyAssemblyJar := {
 // End: Assembly Tasks
 
 // Begin: Assembly
+
+// Begin: Assembly
 assemblyJarName := s"walker-${version.value}.jar"
 assembly / assemblyMergeStrategy := {
   case PathList("META-INF", x, xs @ _*) if x.toLowerCase == "services" => MergeStrategy.filterDistinctLines
@@ -61,61 +65,3 @@ assembly / assemblyMergeStrategy := {
   case x => MergeStrategy.first
 }
 // End: Assembly
-
-lazy val client = project
-  .dependsOn(shared)
-  .settings(common)
-  .settings(
-    libraryDependencies ++= {
-      Seq(
-        "org.scalafx" %% "scalafx" % scalafxVersion,
-        "com.softwaremill.ox" %% "core" % oxVersion,
-        "io.helidon.webclient" % "helidon-webclient" % helidonVersion,
-        "com.typesafe" % "config" % "1.4.3",
-        "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
-        "ch.qos.logback" % "logback-classic" % logbackVersion
-      )
-    }
-  )
-
-lazy val shared = project
-  .settings(common)
-  .settings(
-    libraryDependencies ++= {
-      val jsoniterVersion = "2.38.3"
-      Seq(
-        "com.github.plokhotnyuk.jsoniter-scala" %% "jsoniter-scala-core" % jsoniterVersion,
-        "com.github.plokhotnyuk.jsoniter-scala" %% "jsoniter-scala-macros" % jsoniterVersion % Provided,
-        "org.scalafx" %% "scalafx" % scalafxVersion
-         exclude("org.openjfx", "javafx-controls")
-         exclude("org.openjfx", "javafx-fxml")
-         exclude("org.openjfx", "javafx-graphics")
-         exclude("org.openjfx", "javafx-media")
-         exclude("org.openjfx", "javafx-swing")
-         exclude("org.openjfx", "javafx-web"),
-        "org.scalatest" %% "scalatest" % scalatestVersion % Test
-      )
-    }
-  )
-
-lazy val server = project
-  .enablePlugins(JavaServerAppPackaging)
-  .dependsOn(shared)
-  .settings(common)
-  .settings(
-    libraryDependencies ++= {
-      Seq(
-        "io.helidon.webserver" % "helidon-webserver" % helidonVersion,
-        "com.softwaremill.ox" %% "core" % oxVersion,
-        "org.scalikejdbc" %% "scalikejdbc" % "4.3.2",
-        "com.zaxxer" % "HikariCP" % "7.0.2" exclude("org.slf4j", "slf4j-api"),
-        "org.postgresql" % "postgresql" % "42.7.8",
-        "com.github.blemale" %% "scaffeine" % "5.2.1",
-        "org.jodd" % "jodd-mail" % "7.1.0",
-        "com.typesafe" % "config" % "1.4.3",
-        "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
-        "ch.qos.logback" % "logback-classic" % logbackVersion,
-        "org.scalatest" %% "scalatest" % scalatestVersion % Test
-      )
-    }
-  )
