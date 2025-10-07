@@ -32,7 +32,6 @@ final class Model(store: Store) extends LazyLogging:
       assertNotInFxThread("list walkers")
       observableWalkers.clear
       observableWalkers ++= store.listWalkers()
-      )
 
   def add(walker: Walker)(runLast: => Unit): Unit =
     supervised:
