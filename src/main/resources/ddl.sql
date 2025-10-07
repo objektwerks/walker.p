@@ -1,35 +1,19 @@
-DROP SCHEMA PUBLIC CASCADE;
-CREATE SCHEMA PUBLIC;
-
-CREATE TABLE account (
-  id BIGSERIAL PRIMARY KEY,
-  license CHAR(36) UNIQUE NOT NULL,
-  email_address VARCHAR UNIQUE NOT NULL,
-  pin CHAR(7) NOT NULL,
-  activated BIGINT NOT NULL,
-  deactivated BIGINT NOT NULL
+create table if not exists walker (
+  id long primary key auto_increment,
+  name varchar(24) not null
 );
-
-CREATE TABLE walker (
-  id BIGSERIAL PRIMARY KEY,
-  account_id BIGINT REFERENCES account(id),
-  name VARCHAR(24) NOT NULL
-);
+create index if not exists walker_name_idx ON walker(name);
 
 CREATE TABLE session (
-  id BIGSERIAL PRIMARY KEY,
-  walker_id BIGINT REFERENCES walker(id),
-  weight INT NOT NULL,
-  weight_unit CHAR(2) NOT NULL,
-  distance INT NOT NULL,
-  distance_unit CHAR(2) NOT NULL,
-  hours INT NOT NULL,
-  minutes INT NOT NULL,
-  calories INT NOT NULL,
-  datetime BIGINT NOT NULL
+  id long primary key auto_increment,
+  walker_id long references walker(id),
+  weight int not null,
+  weight_unit char(2) NOT NULL,
+  distance int not null,
+  distance_unit char(2) NOT NULL,
+  hours int not nullL,
+  minutes int not null,
+  calories int not null,
+  datetime bigint not null
 );
-
-CREATE TABLE fault (
-  cause VARCHAR NOT NULL,
-  occurred VARCHAR NOT NULL
-);
+create index if not exists session_datetime_idx ON session(datetime);
