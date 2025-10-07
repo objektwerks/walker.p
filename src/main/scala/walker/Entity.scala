@@ -19,7 +19,7 @@ object Entity:
   def toEpochMillis(localDateTime: LocalDateTime): Long = localDateTime.toInstant(ZoneOffset.UTC).toEpochMilli
 
 final case class Walker(id: Long = 0,
-                         name: String) extends Entity derives CanEqual:
+                        name: String) extends Entity derives CanEqual:
   val nameProperty = ObjectProperty[String](this, "name", name)
   val walker = this
 
