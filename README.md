@@ -4,7 +4,7 @@ Walker
 
 Install
 -------
-1. Select [Swimmer](https://www.jdeploy.com/~walker-sessions)
+1. Select [Walker](https://www.jdeploy.com/~walker-sessions)
 2. Select a platform to download a compressed app installer.
 3. Decompress app installer.
 4. Install app by double-clicking app installer.
