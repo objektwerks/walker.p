@@ -1,4 +1,4 @@
-package swimmer
+package walker
 
 import com.typesafe.config.ConfigFactory
 import com.typesafe.scalalogging.LazyLogging
@@ -9,7 +9,7 @@ import java.awt.Taskbar.Feature
 import scalafx.application.JFXApp3
 
 object App extends JFXApp3 with LazyLogging:
-  logger.info("Swimmer starting ...")
+  logger.info("Walker starting ...")
 
   val conf = ConfigFactory.load("app.conf")
   val context = Context(conf)
@@ -31,9 +31,9 @@ object App extends JFXApp3 with LazyLogging:
         val appIcon = Toolkit.getDefaultToolkit.getImage(this.getClass().getResource("/image/icon.png"))
         taskbar.setIconImage(appIcon)
     
-    model.swimmers()
+    model.walkers()
 
     stage.show()
-    logger.info("Swimmer started at url: {}", context.url)
+    logger.info("Walker started at url: {}", context.url)
 
-  override def stopApp(): Unit = logger.info("Swimmer stopped.")
+  override def stopApp(): Unit = logger.info("Walker stopped.")
