@@ -23,7 +23,7 @@ final class Menu(context: Context) extends MenuBar:
     text = context.menuAbout
     onAction = (_: ActionEvent) =>
       new Alert(AlertType.Information):
-        initOwner(Client.stage)
+        initOwner(App.stage)
         title = context.windowTitle
         headerText = context.aboutAlertHeaderText
         dialogPane().content = gridPaneAbout
