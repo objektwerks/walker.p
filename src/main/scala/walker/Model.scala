@@ -41,22 +41,13 @@ final class Model(store: Store) extends LazyLogging:
       selectedWalkerId.value = id
       logger.info(s"Added walker: $walker")
 
-  def update(selectedIndex: Int, walker: Walker)(runLast: => Unit): Unit =
+  def update(previousWalker: Walker, updatedWalker: Walker): Unit =
     supervised:
-      assertNotInFxThread(s"update walker from: $selectedIndex to: $walker")
-      fetcher.fetch(
-        SaveWalker(objectAccount.get.license, walker),
-        (event: Event) => event match
-          case fault @ Fault(_, _) => onFetchFault("update walker", walker, fault)
-          case WalkerSaved(id) =>
-            if selectedIndex > -1 then
-              observableWalkers.update(selectedIndex, walker)      
-              logger.info(s"Updated walker from: $selectedIndex to: $walker")
-              runLast
-            else
-              logger.error(s"Update of walker from: $selectedIndex to: $walker failed due to invalid index: $selectedIndex")
-          case _ => ()
-      )
+      assertNotInFxThread(s"update walker from: $previousWalker to: $updatedWalker")
+      store.updateWalker(updatedWalker)
+      val index = observableWalkers.indexOf(previousWalker)
+      if index > -1 then observableWalkers.update(index, updatedWalker)      
+      logger.info(s"Updated walker from: $previousWalker to: $updatedWalker")
 
   def sessions(walkerId: Long): Unit =
     supervised:
