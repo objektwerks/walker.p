@@ -33,7 +33,7 @@ final class Model(store: Store) extends LazyLogging:
       observableWalkers.clear
       observableWalkers ++= store.listWalkers()
 
-  def add(walker: Walker)(runLast: => Unit): Unit =
+  def add(walker: Walker): Unit =
     supervised:
       assertNotInFxThread(s"add walker: $walker")
       val id = store.addWalker(walker)
@@ -55,7 +55,7 @@ final class Model(store: Store) extends LazyLogging:
       observableSessions.clear
       observableSessions ++= store.listSessions(walkerId)
 
-  def add(session: Session)(runLast: => Unit): Unit =
+  def add(session: Session): Unit =
     supervised:
       assertNotInFxThread(s"add session: $session")
       val id = store.addSession(session)
