@@ -122,9 +122,9 @@ final class SessionsPane(context: Context, model: Model) extends VBox:
       val selectedIndex = tableView.selectionModel().getSelectedIndex
       val session = tableView.selectionModel().getSelectedItem.session
       SessionDialog(context, session).showAndWait() match
-        case Some(session: Session) => model.update(selectedIndex, session){
+        case Some(updatedSession: Session) =>
+          model.update(session, updatedSession)
           tableView.selectionModel().select(selectedIndex)
-        }
         case _ =>
 
   def chart(): Unit = ChartDialog(context, model).showAndWait()
