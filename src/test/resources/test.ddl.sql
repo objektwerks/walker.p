@@ -11,7 +11,7 @@ create table if not exists session (
   weight_unit char(2) not null,
   distance int not null,
   distance_unit char(2) not null,
-  hours int not nullL,
+  hours int not null,
   minutes int not null,
   calories int not null,
   datetime bigint not null
