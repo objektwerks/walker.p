@@ -4,11 +4,11 @@ import scalafx.Includes.*
 import scalafx.scene.control.{ButtonType, Dialog, TabPane}
 import scalafx.scene.layout.VBox
 
-import walker.{Client, Context, Model}
+import walker.{App, Context, Model}
 import walker.chart.{CaloriesChart, DistanceChart, WeightChart}
 
 final class ChartDialog(context: Context, model: Model) extends Dialog:
-  initOwner(Client.stage)
+  initOwner(App.stage)
   title = context.windowTitle
   headerText = context.dialogCharts
 
