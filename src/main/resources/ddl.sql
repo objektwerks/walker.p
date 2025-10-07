@@ -8,10 +8,10 @@ create table if not exists session (
   id long primary key auto_increment,
   walker_id long references walker(id),
   weight int not null,
-  weight_unit char(2) NOT NULL,
+  weight_unit char(2) not null,
   distance int not null,
-  distance_unit char(2) NOT NULL,
-  hours int not nullL,
+  distance_unit char(2) not null,
+  hours int not null,
   minutes int not null,
   calories int not null,
   datetime bigint not null
