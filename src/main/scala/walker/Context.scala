@@ -26,28 +26,15 @@ final class Context(config: Config):
   val buttonEdit = config.getString("button.edit")
   val buttonSave = config.getString("button.save")
   val buttonChart = config.getString("button.chart")
-  val buttonFaults = config.getString("button.faults")
-  val buttonRegister = config.getString("button.register")
-  val buttonLogin = config.getString("button.login")
-  val buttonAccount = config.getString("button.account")
-  val buttonActivate = config.getString("button.activate")
-  val buttonDeactivate = config.getString("button.deactivate")
 
   val chartMin = config.getString("chart.min")
   val chartMax = config.getString("chart.max")
   val chartAvg = config.getString("chart.avg")
   val chartMonthDay = config.getString("chart.monthDay")
 
-  val dialogRegisterLogin = config.getString("dialog.registerLogin")
-  val dialogAccount = config.getString("dialog.account")
   val dialogWalker = config.getString("dialog.walker")
   val dialogSession = config.getString("dialog.session")
   val dialogCharts = config.getString("dialog.charts")
-  val dialogFaults = config.getString("dialog.faults")
-
-  val errorServer = config.getString("error.server")
-  val errorRegister = config.getString("error.register")
-  val errorLogin = config.getString("error.login")
 
   val headerName = config.getString("header.name")
   val headerWeight = config.getString("header.weight")
@@ -61,11 +48,6 @@ final class Context(config: Config):
   val headerOccurred = config.getString("header.occurred")
   val headerFault = config.getString("header.fault")
 
-  val labelLicense = config.getString("label.license")
-  val labelEmailAddress = config.getString("label.emailAddress")
-  val labelPin = config.getString("label.pin")
-  val labelActivated = config.getString("label.activated")
-  val labelDeactivated = config.getString("label.deactivated")
   val labelWalkers = config.getString("label.walkers")
   val labelSessions = config.getString("label.sessions")
   val labelName = config.getString("label.name")
@@ -93,7 +75,6 @@ final class Context(config: Config):
   val dateTimeSelectorSecond = config.getString("dateTimeSelector.second")
   val dateTimeSelectorClose = config.getString("dateTimeSelector.close")
 
-  def logoImage = loadImageView("/image/icon.png")
   def addImage = loadImageView("/image/add.png")
   def editImage = loadImageView("/image/edit.png")
   def chartImage = loadImageView("/image/chart.png")
