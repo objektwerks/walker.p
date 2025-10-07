@@ -36,17 +36,10 @@ final class Model(store: Store) extends LazyLogging:
   def add(walker: Walker)(runLast: => Unit): Unit =
     supervised:
       assertNotInFxThread(s"add walker: $walker")
-      fetcher.fetch(
-        SaveWalker(objectAccount.get.license, walker),
-        (event: Event) => event match
-          case fault @ Fault(_, _) => onFetchFault("add walker", walker, fault)
-          case WalkerSaved(id) =>
-            observableWalkers.insert(0, walker.copy(id = id))
-            observableWalkers.sort()
-            selectedWalkerId.set(id)
-            runLast
-          case _ => ()
-      )
+      val id = store.addWalker(walker)
+      observableWalkers.insert(0, walker.copy(id = id))
+      selectedWalkerId.value = id
+      logger.info(s"Added walker: $walker")
 
   def update(selectedIndex: Int, walker: Walker)(runLast: => Unit): Unit =
     supervised:
