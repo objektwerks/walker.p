@@ -1,5 +1,5 @@
-Walker
-------
+Walker ( Personal Edition )
+---------------------------
 >Walker app using ScalaFx, ScalikeJdbc, Jsoniter, JoddMail, PostgreSql, HikariCP, Helidon, Ox and Scala 3.
 
 Install
