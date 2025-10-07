@@ -1,22 +1,18 @@
-create table if not exists swimmer (
+create table if not exists walker (
   id long primary key auto_increment,
   name varchar(24) not null
 );
-create index if not exists swimmer_name_idx ON swimmer(name);
+create index if not exists walker_name_idx ON walker(name);
 
-create table if not exists session (
+CREATE TABLE session (
   id long primary key auto_increment,
-  swimmer_id long references swimmer(id),
+  walker_id long references walker(id),
   weight int not null,
-  weight_unit char(2) not null,
-  laps int not null,
-  lap_distance int not null,
-  lap_unit varchar(6) not null,
-  style varchar(9) not null,
-  kickboard boolean not null,
-  fins boolean not null,
+  weight_unit char(2) NOT NULL,
+  distance int not null,
+  distance_unit char(2) NOT NULL,
+  hours int not nullL,
   minutes int not null,
-  seconds int not null,
   calories int not null,
   datetime bigint not null
 );

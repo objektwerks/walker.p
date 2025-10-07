@@ -4,7 +4,7 @@ create table if not exists walker (
 );
 create index if not exists walker_name_idx ON walker(name);
 
-CREATE TABLE session (
+create table if not exists session (
   id long primary key auto_increment,
   walker_id long references walker(id),
   weight int not null,
