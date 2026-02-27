@@ -1,7 +1,7 @@
 name := "walker.p"
 organization := "objektwerks"
 version := "1.0.0"
-scalaVersion := "3.8.2-RC3"
+scalaVersion := "3.8.2"
 mainClass := Some("walker.App")
 libraryDependencies ++= {
   Seq(
